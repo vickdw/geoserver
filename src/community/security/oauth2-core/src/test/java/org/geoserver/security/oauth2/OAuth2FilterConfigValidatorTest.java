@@ -1,4 +1,4 @@
-/* (c) 2016 Open Source Geospatial Foundation - all rights reserved
+/* (c) 2018 Open Source Geospatial Foundation - all rights reserved
  * This code is licensed under the GPL 2.0 license, available at the root
  * application directory.
  */
@@ -17,10 +17,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Validates {@link OAuth2FilterConfig} objects.
+ *
  * @author Alessio Fabiani, GeoSolutions S.A.S.
- *
- *         Validates {@link OAuth2FilterConfig} objects.
- *
  */
 public class OAuth2FilterConfigValidatorTest extends GeoServerMockTestSupport {
 
@@ -35,15 +34,15 @@ public class OAuth2FilterConfigValidatorTest extends GeoServerMockTestSupport {
 
     @Test
     public void testOAuth2FilterConfigValidation() throws Exception {
-        GoogleOAuth2FilterConfig config = new GoogleOAuth2FilterConfig();
-        config.setClassName(GeoServerOAuthAuthenticationFilter.class.getName());
+        GeoServerOAuth2FilterConfig config = new GeoServerOAuth2FilterConfig();
+        config.setClassName(GeoServerOAuthAuthenticationFilter.class.getName().toString());
         config.setName("testOAuth2");
 
         check(config);
         validator.validateOAuth2FilterConfig(config);
     }
 
-    public void check(GoogleOAuth2FilterConfig config) throws Exception {
+    public void check(OAuth2FilterConfig config) throws Exception {
 
         boolean failed = false;
         try {
@@ -58,7 +57,7 @@ public class OAuth2FilterConfigValidatorTest extends GeoServerMockTestSupport {
         }
         assertTrue(failed);
 
-        config.setRoleSource(PreAuthenticatedUserNameRoleSource.UserGroupService);
+//        config.setRoleSource(PreAuthenticatedUserNameRoleSource.UserGroupService);
         failed = false;
         try {
             validator.validateOAuth2FilterConfig(config);
@@ -72,7 +71,7 @@ public class OAuth2FilterConfigValidatorTest extends GeoServerMockTestSupport {
         }
         assertTrue(failed);
 
-        config.setUserGroupServiceName("blabla");
+//        config.setUserGroupServiceName("blabla");
         failed = false;
         try {
             validator.validateOAuth2FilterConfig(config);
@@ -86,7 +85,7 @@ public class OAuth2FilterConfigValidatorTest extends GeoServerMockTestSupport {
         }
         assertTrue(failed);
 
-        config.setRoleConverterName(null);
+//        config.setRoleConverterName(null);
 
         config.setCheckTokenEndpointUrl(null);
 
@@ -116,12 +115,12 @@ public class OAuth2FilterConfigValidatorTest extends GeoServerMockTestSupport {
         }
         assertTrue(failed);
 
-        config.setAccessTokenUri("http://localhost/callback");
+        config.setAccessTokenUri("https://localhost/callback");
         failed = false;
         try {
             validator.validateOAuth2FilterConfig(config);
         } catch (OAuth2FilterConfigException ex) {
-            assertEquals(OAuth2FilterConfigException.OAUTH2_ACCESSTOKENURI_NOT_HTTPS, ex.getId());
+            assertEquals(OAuth2FilterConfigException.OAUTH2_CLIENT_ID_REQUIRED, ex.getId());
             assertEquals(0, ex.getArgs().length);
             LOGGER.info(ex.getMessage());
             failed = true;

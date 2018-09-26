@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Indexer>
+    <coverages>
+        <coverage>
+            <name>u-component_of_current_surface</name>
+        </coverage>
+        <coverage>
+            <name>v-component_of_current_surface</name>
+        </coverage>
+    </coverages>
+</Indexer>
+
